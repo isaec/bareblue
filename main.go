@@ -5,8 +5,8 @@ import (
 
 	"fyne.io/fyne"
 	"fyne.io/fyne/app"
+	"fyne.io/fyne/canvas"
 	"fyne.io/fyne/layout"
-	"fyne.io/fyne/theme"
 	"fyne.io/fyne/widget"
 )
 
@@ -36,23 +36,35 @@ func main() {
 		"Ethan",
 		"Evelyn"}
 
+	//messageList block
 	messageList := widget.NewList(
 		func() int { return len(chats) },
 
 		func() fyne.CanvasObject {
-			//groupChat := canvas.NewText(chats[chatIndex], color.White)
-			return fyne.NewContainerWithLayout(layout.NewHBoxLayout(), widget.NewIcon(theme.WarningIcon()), widget.NewLabel("Template Chat"))
+
+			contactIcon := canvas.NewImageFromFile("images/512px-Google_Contacts_icon.svg.png")
+			contactIcon.FillMode = canvas.ImageFillContain
+			contactIcon.SetMinSize(fyne.NewSize(40, 40))
+
+			return fyne.NewContainerWithLayout(layout.NewHBoxLayout(),
+				contactIcon,
+				fyne.NewContainerWithLayout(layout.NewVBoxLayout(),
+					widget.NewLabel("Template Chat"),
+					widget.NewLabel("last message (??/??)")))
 		},
 
 		func(id widget.ListItemID, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(chats[id])
+			item.(*fyne.Container).Objects[1].(*fyne.Container).Objects[0].(*widget.Label).SetText(chats[id])
 		})
 
 	messageList.OnSelected = func(id widget.ListItemID) {
 		fmt.Println(id)
 	}
+	//end messageList block
 
-	w.SetContent(messageList)
-	w.Resize(fyne.NewSize(120, 240))
+	messageAndContent := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), messageList, widget.NewSeparator())
+
+	w.SetContent(messageAndContent)
+	w.Resize(fyne.NewSize(1200, 600))
 	w.ShowAndRun()
 }
