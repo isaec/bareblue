@@ -67,7 +67,7 @@ func main() {
 
 	var chatMessages []fyne.CanvasObject
 	for i := 0; i < 100; i++ {
-		chatMessages = append(chatMessages, widget.NewLabel(string(i)))
+		chatMessages = append(chatMessages, widget.NewLabel("Message number "+fmt.Sprint(i)))
 	}
 
 	chatContent := container.NewVScroll(widget.NewVBox(chatMessages...))
