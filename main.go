@@ -6,6 +6,7 @@ import (
 	"fyne.io/fyne"
 	"fyne.io/fyne/app"
 	"fyne.io/fyne/canvas"
+	"fyne.io/fyne/container"
 	"fyne.io/fyne/layout"
 	"fyne.io/fyne/widget"
 )
@@ -62,7 +63,18 @@ func main() {
 	}
 	//end messageList block
 
-	messageAndContent := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), messageList, widget.NewSeparator())
+	messageEntry := widget.NewEntry()
+
+	var chatMessages []fyne.CanvasObject
+	for i := 0; i < 100; i++ {
+		chatMessages = append(chatMessages, widget.NewLabel(string(i)))
+	}
+
+	chatContent := container.NewVScroll(widget.NewVBox(chatMessages...))
+
+	content := fyne.NewContainerWithLayout(layout.NewBorderLayout(nil, messageEntry, nil, nil), messageEntry, chatContent)
+
+	messageAndContent := fyne.NewContainerWithLayout(layout.NewBorderLayout(nil, nil, messageList, nil), messageList, content)
 
 	w.SetContent(messageAndContent)
 	w.Resize(fyne.NewSize(1200, 600))
