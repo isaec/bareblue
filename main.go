@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 
 	"fyne.io/fyne"
 	"fyne.io/fyne/app"
@@ -14,6 +16,8 @@ import (
 func main() {
 	a := app.New()
 	w := a.NewWindow("bareblue")
+
+	rand.Seed(time.Now().Unix()) // initialize global pseudo random generator
 
 	chats := []string{
 		"Liam",
@@ -37,6 +41,16 @@ func main() {
 		"Ethan",
 		"Evelyn"}
 
+	messages := []string{
+		"New Message, ",
+		"test message... ",
+		"Another test - ",
+		"Message number ",
+		"extra long message for the sake of it so you can see the long message in its full unlimited glory, number ",
+	}
+
+	chatHeader := widget.NewLabelWithStyle("Chat with noone", fyne.TextAlignCenter, fyne.TextStyle{true, false, true})
+
 	//messageList block
 	messageList := widget.NewList(
 		func() int { return len(chats) },
@@ -50,8 +64,8 @@ func main() {
 			return fyne.NewContainerWithLayout(layout.NewHBoxLayout(),
 				contactIcon,
 				fyne.NewContainerWithLayout(layout.NewVBoxLayout(),
-					widget.NewLabel("Template Chat"),
-					widget.NewLabel("last message (??/??)")))
+					widget.NewLabelWithStyle("Template Chat", fyne.TextAlignCenter, fyne.TextStyle{true, false, false}),
+					widget.NewLabelWithStyle("last message (??/??)", fyne.TextAlignCenter, fyne.TextStyle{false, true, false})))
 		},
 
 		func(id widget.ListItemID, item fyne.CanvasObject) {
@@ -59,20 +73,29 @@ func main() {
 		})
 
 	messageList.OnSelected = func(id widget.ListItemID) {
-		fmt.Println(id)
+		chatHeader.SetText("Chat with " + chats[id])
 	}
 	//end messageList block
 
 	messageEntry := widget.NewEntry()
 
+	messageEntry.SetPlaceHolder("bareblue")
+
 	var chatMessages []fyne.CanvasObject
-	for i := 0; i < 100; i++ {
-		chatMessages = append(chatMessages, widget.NewLabel("Message number "+fmt.Sprint(i)))
+	for i := 0; i < 26; i++ {
+		//code to make random messages
+		var align fyne.TextAlign
+		if i%7 > 3 || i%3 == 0 {
+			align = fyne.TextAlignLeading
+		} else {
+			align = fyne.TextAlignTrailing
+		}
+		chatMessages = append(chatMessages, widget.NewLabelWithStyle((messages[rand.Intn(len(messages))]+fmt.Sprint(i)), align, fyne.TextStyle{}))
 	}
 
 	chatContent := container.NewVScroll(widget.NewVBox(chatMessages...))
 
-	content := fyne.NewContainerWithLayout(layout.NewBorderLayout(nil, messageEntry, nil, nil), messageEntry, chatContent)
+	content := fyne.NewContainerWithLayout(layout.NewBorderLayout(chatHeader, messageEntry, nil, nil), chatHeader, messageEntry, chatContent)
 
 	messageAndContent := fyne.NewContainerWithLayout(layout.NewBorderLayout(nil, nil, messageList, nil), messageList, content)
 
