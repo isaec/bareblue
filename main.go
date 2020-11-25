@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -21,8 +20,6 @@ func main() {
 
 	chats := mockChats()
 
-	messages := mockMessages()
-
 	chatHeader := widget.NewLabelWithStyle("select a chat", fyne.TextAlignCenter, fyne.TextStyle{true, false, true})
 
 	//messageList block
@@ -35,11 +32,14 @@ func main() {
 			contactIcon.FillMode = canvas.ImageFillContain
 			contactIcon.SetMinSize(fyne.NewSize(40, 40))
 
+			lastMessage := widget.NewLabelWithStyle("last message lalalalalaalalalal", fyne.TextAlignCenter, fyne.TextStyle{false, true, false})
+			lastMessage.Wrapping = fyne.TextTruncate
+
 			return fyne.NewContainerWithLayout(layout.NewHBoxLayout(),
 				contactIcon,
 				fyne.NewContainerWithLayout(layout.NewVBoxLayout(),
 					widget.NewLabelWithStyle("Template Chat", fyne.TextAlignCenter, fyne.TextStyle{true, false, false}),
-					widget.NewLabelWithStyle("last message (??/??)", fyne.TextAlignCenter, fyne.TextStyle{false, true, false})))
+					lastMessage))
 		},
 
 		func(id widget.ListItemID, item fyne.CanvasObject) {
@@ -55,19 +55,7 @@ func main() {
 
 	messageEntry.SetPlaceHolder("bareblue")
 
-	var chatMessages []fyne.CanvasObject
-	for i := 0; i < 26; i++ {
-		//code to make random messages
-		var align fyne.TextAlign
-		if i%7 > 3 || i%3 == 0 {
-			align = fyne.TextAlignLeading
-		} else {
-			align = fyne.TextAlignTrailing
-		}
-		message := widget.NewLabelWithStyle((messages[rand.Intn(len(messages))] + fmt.Sprint(i)), align, fyne.TextStyle{})
-		message.Wrapping = fyne.TextWrapWord
-		chatMessages = append(chatMessages, message)
-	}
+	chatMessages := mockChatMessages(25)
 
 	chatContent := container.NewVScroll(widget.NewVBox(chatMessages...))
 
