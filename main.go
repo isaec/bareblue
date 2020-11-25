@@ -49,7 +49,7 @@ func main() {
 		"extra long message for the sake of it so you can see the long message in its full unlimited glory, number ",
 	}
 
-	chatHeader := widget.NewLabelWithStyle("Chat with noone", fyne.TextAlignCenter, fyne.TextStyle{true, false, true})
+	chatHeader := widget.NewLabelWithStyle("select a chat", fyne.TextAlignCenter, fyne.TextStyle{true, false, true})
 
 	//messageList block
 	messageList := widget.NewList(
@@ -73,7 +73,7 @@ func main() {
 		})
 
 	messageList.OnSelected = func(id widget.ListItemID) {
-		chatHeader.SetText("Chat with " + chats[id])
+		chatHeader.SetText(chats[id])
 	}
 	//end messageList block
 
@@ -90,10 +90,14 @@ func main() {
 		} else {
 			align = fyne.TextAlignTrailing
 		}
-		chatMessages = append(chatMessages, widget.NewLabelWithStyle((messages[rand.Intn(len(messages))]+fmt.Sprint(i)), align, fyne.TextStyle{}))
+		message := widget.NewLabelWithStyle((messages[rand.Intn(len(messages))] + fmt.Sprint(i)), align, fyne.TextStyle{})
+		message.Wrapping = fyne.TextWrapWord
+		chatMessages = append(chatMessages, message)
 	}
 
 	chatContent := container.NewVScroll(widget.NewVBox(chatMessages...))
+
+	chatContent.ScrollToBottom()
 
 	content := fyne.NewContainerWithLayout(layout.NewBorderLayout(chatHeader, messageEntry, nil, nil), chatHeader, messageEntry, chatContent)
 
@@ -101,5 +105,6 @@ func main() {
 
 	w.SetContent(messageAndContent)
 	w.Resize(fyne.NewSize(1200, 600))
+	addMenus(&a, &w)
 	w.ShowAndRun()
 }
