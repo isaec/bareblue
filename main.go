@@ -19,35 +19,9 @@ func main() {
 
 	rand.Seed(time.Now().Unix()) // initialize global pseudo random generator
 
-	chats := []string{
-		"Liam",
-		"Olivia",
-		"Noah",
-		"Emma",
-		"Oliver",
-		"Ava",
-		"William",
-		"Sophia",
-		"Elijah",
-		"Isabella",
-		"James",
-		"Charlotte",
-		"Benjamin",
-		"Amelia",
-		"Lucas",
-		"Mia",
-		"Mason",
-		"Harper",
-		"Ethan",
-		"Evelyn"}
+	chats := mockChats()
 
-	messages := []string{
-		"New Message, ",
-		"test message... ",
-		"Another test - ",
-		"Message number ",
-		"extra long message for the sake of it so you can see the long message in its full unlimited glory, number ",
-	}
+	messages := mockMessages()
 
 	chatHeader := widget.NewLabelWithStyle("select a chat", fyne.TextAlignCenter, fyne.TextStyle{true, false, true})
 
