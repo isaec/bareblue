@@ -24,7 +24,7 @@ func main() {
 	badDbString := make(map[string][]string)
 
 	for i := range chats {
-		badDb[chats[i]], badDbString[chats[i]] = mockChatMessages(25)
+		badDb[chats[i]], badDbString[chats[i]] = mockChatMessages(200)
 	}
 
 	chatHeader := widget.NewLabelWithStyle("select a chat", fyne.TextAlignCenter, fyne.TextStyle{Bold: true, Italic: false, Monospace: true})

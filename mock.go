@@ -57,7 +57,7 @@ func mockChatMessages(length int) ([]fyne.CanvasObject, []string) {
 	messages := mockMessages()
 	var chatMessages []fyne.CanvasObject
 	var chatMessagesString []string
-	for i := 0; i < 26; i++ {
+	for i := 0; i < length; i++ {
 		//code to make random messages
 		var align fyne.TextAlign
 		if i%7 > 3 || i%3 == 0 {
