@@ -21,9 +21,10 @@ func main() {
 	chats := mockChats()
 
 	badDb := make(map[string][]fyne.CanvasObject)
+	badDbString := make(map[string][]string)
 
 	for i := range chats {
-		badDb[chats[i]] = mockChatMessages(25)
+		badDb[chats[i]], badDbString[chats[i]] = mockChatMessages(25)
 	}
 
 	chatHeader := widget.NewLabelWithStyle("select a chat", fyne.TextAlignCenter, fyne.TextStyle{Bold: true, Italic: false, Monospace: true})
@@ -63,12 +64,16 @@ func main() {
 		},
 
 		func(id widget.ListItemID, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[1].(*fyne.Container).Objects[0].(*widget.Label).SetText(chats[id])
-			chatMessages = badDb[chats[id]]
+			item.(*fyne.Container).Objects[1].(*fyne.Container).Objects[0].(*widget.Label).SetText(chats[id]) //the name
+			item.(*fyne.Container).Objects[1].(*fyne.Container).Objects[1].(*widget.Label).SetText(           //last message
+				badDbString[chats[id]][len(badDb[chats[id]])-1]) //the text of the last message
 		})
 
 	messageList.OnSelected = func(id widget.ListItemID) {
 		chatHeader.SetText(chats[id])
+		chatContent.Content = widget.NewVBox(badDb[chats[id]]...)
+		chatContent.ScrollToBottom()
+		content.Refresh()
 	}
 	//end messageList block
 
@@ -78,5 +83,4 @@ func main() {
 	w.Resize(fyne.NewSize(1200, 600))
 	addMenus(&a, &w)
 	w.ShowAndRun()
-	//chatContent.ScrollToBottom()
 }

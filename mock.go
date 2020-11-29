@@ -53,9 +53,10 @@ func mockMessages() []string {
 	}
 }
 
-func mockChatMessages(length int) []fyne.CanvasObject {
+func mockChatMessages(length int) ([]fyne.CanvasObject, []string) {
 	messages := mockMessages()
 	var chatMessages []fyne.CanvasObject
+	var chatMessagesString []string
 	for i := 0; i < 26; i++ {
 		//code to make random messages
 		var align fyne.TextAlign
@@ -64,10 +65,12 @@ func mockChatMessages(length int) []fyne.CanvasObject {
 		} else {
 			align = fyne.TextAlignTrailing
 		}
-		message := widget.NewLabelWithStyle((messages[rand.Intn(len(messages))]), align, fyne.TextStyle{})
+		messageText := messages[rand.Intn(len(messages))]
+		message := widget.NewLabelWithStyle((messageText), align, fyne.TextStyle{})
 		message.Wrapping = fyne.TextWrapWord
 		chatMessages = append(chatMessages, message)
+		chatMessagesString = append(chatMessagesString, messageText)
 	}
 
-	return chatMessages
+	return chatMessages, chatMessagesString
 }
